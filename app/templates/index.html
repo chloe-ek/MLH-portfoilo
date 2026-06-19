@@ -32,9 +32,15 @@
 
     <div class="profile">
         <div id="profile-picture" class="profile-picture">
-            <img src="./static/img/logo.jpg">
+            <img src="./static/img/photo.jpeg">
         </div>
-        <h1>{{ title }}</h1>
+        <h1>{{ about.name }}</h1>
+        <p>{{ about.location }}</p>
+    </div>
+
+    <div class="about">
+        <h2>About Me</h2>
+        <p>{{ about.bio }}</p>
     </div>
 </body>
 </html>
