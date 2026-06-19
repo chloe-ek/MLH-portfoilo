@@ -35,12 +35,42 @@
             <img src="./static/img/photo.jpeg">
         </div>
         <h1>{{ about.name }}</h1>
-        <p>{{ about.location }}</p>
     </div>
 
     <div class="about">
         <h2>About Me</h2>
         <p>{{ about.bio }}</p>
     </div>
+
+    <section class="section">
+        <div class="container">
+            <h2>Work Experience</h2>
+            {% for exp in experiences %}
+            <div class="card">
+                <div class="card-header">
+                    <h3>{{ exp.role }}</h3>
+                    <span class="duration">{{ exp.duration }}</span>
+                </div>
+                <p class="company">{{ exp.company }}</p>
+                <p>{{ exp.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2>Education</h2>
+            {% for edu in education %}
+            <div class="card">
+                <div class="card-header">
+                    <h3>{{ edu.school }}</h3>
+                    <span class="duration">{{ edu.years }}</span>
+                </div>
+                <p>{{ edu.degree }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
 </body>
 </html>
