@@ -79,5 +79,21 @@
             <a href="/hobbies" class="hobbies-link">Check out my hobbies →</a>
         </div>
     </section>
+
+    <section class="section">
+    <div class="container">
+        <h2>Places I've Visited</h2>
+
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps/d/u/0/embed?mid=19iRTRLHy-yZxafiSYzO-oX6Jjt3xlI4&ehbc=2E312F&noprof=1" width="640" height="480"></iframe>
+        </div>
+
+        <div class="location-tags">
+            {% for location in locations %}
+            <span>{{ location }}</span>
+            {% endfor %}
+        </div>
+    </div>
+</section>
 </body>
 </html>
