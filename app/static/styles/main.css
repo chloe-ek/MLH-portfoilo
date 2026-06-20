@@ -237,6 +237,27 @@ body {
     font-weight: 700;
 }
 
+.map-container {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+}
+
+.location-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.location-tags span {
+    background-color: white;
+    color: #1C539F;
+    border: 1px solid #d0d8e8;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 14px;
+}
 
 .nav-content {
     display: flex;
