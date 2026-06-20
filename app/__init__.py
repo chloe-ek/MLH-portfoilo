@@ -15,6 +15,22 @@ hobbies = [
         "name": "Baking",
         "image": "baking.jpeg",
         "description": "Noting beats the smell of freshly baked cookies!"
+    },
+    {
+
+        "name": "Violin",
+
+        "image": "violin.jpg",
+
+        "description": "I enjoy playing violin and listening to classical music."
+
+    },
+    {
+        "name": "Travel",
+
+        "image": "travel.jpg",
+
+        "description": "I like visiting new cities, trying local food, and exploring museums."
     }
 ]
 
