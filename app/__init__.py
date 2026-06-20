@@ -5,6 +5,11 @@ from dotenv import load_dotenv
 load_dotenv()
 app = Flask(__name__)
 
+pages = [
+    {"name": "Home", "url": "/"},
+    {"name": "Hobbies", "url": "/hobbies"}
+]
+
 hobbies = [
     {
         "name": "Hiking",
@@ -68,8 +73,8 @@ def index():
         }
     ]
     return render_template('index.html', title="MLH Fellow", url=os.getenv("URL"),
-                           about=about, experiences=experiences, education=education, hobbies=hobbies)
+                           about=about, experiences=experiences, education=education, hobbies=hobbies, pages=pages)
 
 @app.route('/hobbies')
 def hobbies_page():
-    return render_template('hobbies.html', title="Hobbies", hobbies=hobbies)
+    return render_template('hobbies.html', title="Hobbies", hobbies=hobbies, pages=pages)
