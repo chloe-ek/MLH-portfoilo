@@ -6,8 +6,10 @@ load_dotenv()
 app = Flask(__name__)
 
 pages = [
-    {"name": "Home", "url": "/"},
-    {"name": "Hobbies", "url": "/hobbies"}
+    {"name": "Experience", "url": "/#experience"},
+    {"name": "Education", "url": "/#education"},
+    {"name": "Certifications", "url": "/#certifications"},
+    {"name": "Hobbies", "url": "/hobbies"},
 ]
 
 hobbies = [
@@ -18,62 +20,61 @@ hobbies = [
     },
     {
         "name": "Baking",
-        "image": "baking.jpeg",
-        "description": "Noting beats the smell of freshly baked cookies!"
-    },
-    {
-
-        "name": "Violin",
-
-        "image": "violin.jpg",
-
-        "description": "I enjoy playing violin and listening to classical music."
-
+        "image": "baking.jpg",
+        "description": "Nothing beats the smell of freshly baked cookies!"
     },
     {
         "name": "Travel",
-
         "image": "travel.jpg",
-
-        "description": "I like visiting new cities, trying local food, and exploring museums."
+        "description": "love visiting new cities, trying local food, and exploring new places."
     }
 ]
 
 @app.route('/')
 def index():
     about = {
-        "name": "Chloe",
-        "bio": "Hi! I'm Chloe, a software developer and MLH Fellow based in Vancouver. I love building things for the web and learning new technologies. Outside of coding, I enjoy exploring new places and trying new foods."
+        "name": "Chloe Kwon",
+        "bio": "Hi! I'm Chloe, a software developer and MLH Fellow based in Vancouver. I love building things for the web and learning new technologies. Outside of coding, I enjoy exploring new places and trying new cafes."
     }
     experiences = [
         {
-            "company": "MLH Fellow",
-            "role": "Meta Production Engineering Fellow",
-            "duration": "June 2026 - Present",
-            "description": "Production Engineering Fellow working on infrastructure and site reliability."
+            "company": "Meta X MLH Fellowship",
+            "role": "Production Engineering Fellow",
+            "duration": "Jun 2026 – Present",
+            "location": "Remote"
         },
         {
-            "company": "Tech Startup",
-            "role": "Software Engineering Intern",
-            "duration": "Sep 2024 – Dec 2025",
-            "description": "Built and shipped features for the main product using React and Node.js."
+            "company": "Brats and Bavaria",
+            "role": "Freelance Full-Stack Developer",
+            "duration": "May 2025 – Present",
+            "location": "Vancouver, BC"
         },
         {
-            "company": "University Research Lab",
-            "role": "Research Assistant",
-            "duration": "Sep 2024 – Dec 2025",
-            "description": "Assisted with data analysis and machine learning experiments."
+            "company": "Byte Camp",
+            "role": "Software Developer",
+            "duration": "Sep 2025 – Dec 2025",
+            "location": "Vancouver, BC"
         }
     ]
     education = [
         {
-            "school": "British Columbia Institute of Technology",
-            "degree": "Computer Systems Technology",
-            "years": "2024 – 2025"
+            "school": "British Columbia Institute of Technology (BCIT)",
+            "degree": "Diploma in Computer Systems Technology",
+            "years": "Jan 2024 – Dec 2025"
         }
     ]
+    certifications = [
+        {
+            "name": "AWS Certified Solutions Architect – Associate",
+            "credential": "SAA-C03",
+            "issued": "Jun 2026"
+        }
+    ]
+
     return render_template('index.html', title="MLH Fellow", url=os.getenv("URL"),
-                           about=about, experiences=experiences, education=education, hobbies=hobbies, pages=pages)
+                           about=about, experiences=experiences, education=education,
+                           certifications=certifications, 
+                           hobbies=hobbies, pages=pages)
 
 @app.route('/hobbies')
 def hobbies_page():

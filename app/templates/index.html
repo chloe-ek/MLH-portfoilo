@@ -22,12 +22,11 @@
 <body>
     <header class="nav-bar">
         <div class="nav-content">
-             <a href="/">
+            <a href="/">
                 <div class="nav-logo">
                     <img src="./static/img/logo.svg" />
                 </div>
             </a>
-
             <nav class="nav-links">
                 {% for page in pages %}
                 <a href="{{ page.url }}">{{ page.name }}</a>
@@ -38,9 +37,10 @@
 
     <div class="profile">
         <div id="profile-picture" class="profile-picture">
-            <img src="./static/img/photo.jpeg">
+            <img src="./static/img/profile.jpg">
         </div>
         <h1>{{ about.name }}</h1>
+        <p class="profile-subtitle">Software Developer &amp; MLH Production Engineering Fellow</p>
     </div>
 
     <div class="about">
@@ -48,7 +48,7 @@
         <p>{{ about.bio }}</p>
     </div>
 
-    <section class="section">
+    <section class="section" id="experience">
         <div class="container">
             <h2>Work Experience</h2>
             {% for exp in experiences %}
@@ -57,14 +57,13 @@
                     <h3>{{ exp.role }}</h3>
                     <span class="duration">{{ exp.duration }}</span>
                 </div>
-                <p class="company">{{ exp.company }}</p>
-                <p>{{ exp.description }}</p>
+                <p class="company">{{ exp.company }} <span class="location">· {{ exp.location }}</span></p>
             </div>
             {% endfor %}
         </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="education">
         <div class="container">
             <h2>Education</h2>
             {% for edu in education %}
@@ -79,6 +78,21 @@
         </div>
     </section>
 
+    <section class="section" id="certifications">
+        <div class="container">
+            <h2>Certifications</h2>
+            {% for cert in certifications %}
+            <div class="card cert-card">
+                <div class="card-header">
+                    <h3>{{ cert.name }}</h3>
+                    <span class="duration">{{ cert.issued }}</span>
+                </div>
+                <p class="company">{{ cert.credential }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
     <section class="section">
         <div class="container">
             <h2>Hobbies</h2>
@@ -87,22 +101,17 @@
     </section>
 
     <section class="section">
-    <div class="container">
-        <h2>Places I've Visited</h2>
-
-        <div class="map-container">
-            <iframe src="https://www.google.com/maps/d/u/0/embed?mid=19iRTRLHy-yZxafiSYzO-oX6Jjt3xlI4&ehbc=2E312F&noprof=1" width="640" height="480"></iframe>
+        <div class="container">
+            <h2>Places I've Visited</h2>
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1mOATtoiM2dTfAcqDv_pJP45tirZV-rg" allowfullscreen></iframe>
+            </div>
+            <div class="location-tags">
+                {% for location in locations %}
+                <span>{{ location }}</span>
+                {% endfor %}
+            </div>
         </div>
-
-        <div class="location-tags">
-            {% for location in locations %}
-            <span>{{ location }}</span>
-            {% endfor %}
-        </div>
-    </div>
-</section>
+    </section>
 </body>
 </html>
-
-
-

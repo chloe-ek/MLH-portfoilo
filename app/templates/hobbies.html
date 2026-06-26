@@ -16,12 +16,11 @@
 <body>
     <header class="nav-bar">
         <div class="nav-content">
-             <a href="/">
+            <a href="/">
                 <div class="nav-logo">
                     <img src="./static/img/logo.svg" />
                 </div>
             </a>
-
             <nav class="nav-links">
                 {% for page in pages %}
                 <a href="{{ page.url }}">{{ page.name }}</a>
@@ -42,10 +41,8 @@
                 </div>
                 {% endfor %}
             </div>
+            <a href="/" class="back-link">← Back to Home</a>
         </div>
     </section>
-        <div class="container">
-        <a href="/">Back to Home</a>
-    </div>
 </body>
 </html>
