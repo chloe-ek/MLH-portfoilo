@@ -33,7 +33,7 @@ hobbies = [
 @app.route('/')
 def index():
     about = {
-        "name": "Chloe Kwon",
+        "name": "Chloe Kwon - Eunji",
         "bio": "Hi! I'm Chloe, a software developer and MLH Fellow based in Vancouver. I love building things for the web and learning new technologies. Outside of coding, I enjoy exploring new places and trying new cafes."
     }
     experiences = [
