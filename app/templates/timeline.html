@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link lang='sass' rel="stylesheet" href="./static/styles/main.css">
+    <link rel='icon' href='./static/img/favicon.ico' type='image/x-icon' />
+    <style>
+        .timeline-form input,
+        .timeline-form textarea {
+            width: 100%;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-family: "Roboto", serif;
+            font-size: 14px;
+            color: #333;
+            box-sizing: border-box;
+            background-color: #fafafa;
+        }
+
+        .timeline-form input:focus,
+        .timeline-form textarea:focus {
+            outline: none;
+            border-color: #1C539F;
+            background-color: #fff;
+        }
+
+        .timeline-form textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .timeline-form button {
+            background-color: #1C539F;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.15s;
+        }
+
+        .timeline-form button:hover {
+            background-color: #164080;
+        }
+
+        .post-email {
+            font-size: 13px;
+            color: #aaa;
+            margin: 2px 0 8px 0;
+        }
+
+        .post-content {
+            color: #444;
+            line-height: 1.6;
+            margin: 0;
+        }
+    </style>
+    <title>{{ title }}</title>
+</head>
+
+<body>
+    <header class="nav-bar">
+        <div class="nav-content">
+            <a href="/">
+                <div class="nav-logo">
+                    <img src="./static/img/logo.svg" />
+                </div>
+            </a>
+            <nav class="nav-links">
+                {% for page in pages %}
+                <a href="{{ page.url }}">{{ page.name }}</a>
+                {% endfor %}
+            </nav>
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="container">
+            <h2>Timeline</h2>
+
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">Share an Update</h3>
+                <form id="timeline-form" class="timeline-form">
+                    <input type="text" id="name" placeholder="Your Name" required>
+                    <input type="email" id="email" placeholder="Your Email" required>
+                    <textarea id="content" placeholder="What's on your mind?" required></textarea>
+                    <button type="submit">Post</button>
+                </form>
+            </div>
+
+            <div id="posts"></div>
+        </div>
+    </section>
+
+    <script>
+        async function loadPosts() {
+            const res = await fetch('/api/timeline_post');
+            const data = await res.json();
+            const div = document.getElementById('posts');
+            div.innerHTML = data.timeline_posts.map(p => `
+                <div class="card">
+                    <div class="card-header">
+                        <h3>${p.name}</h3>
+                        <span class="duration">${p.created_at}</span>
+                    </div>
+                    <p class="post-email">${p.email}</p>
+                    <p class="post-content">${p.content}</p>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('timeline-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('name', document.getElementById('name').value);
+            formData.append('email', document.getElementById('email').value);
+            formData.append('content', document.getElementById('content').value);
+
+            await fetch('/api/timeline_post', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            });
+
+            e.target.reset();
+            loadPosts();
+        });
+
+        loadPosts();
+    </script>
+</body>
+
+</html>
