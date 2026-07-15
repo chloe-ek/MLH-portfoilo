@@ -10,3 +10,4 @@ pycparser
 PyMySQL
 python-dotenv
 Werkzeug
+pytest
