@@ -1,4 +1,4 @@
 #!/bin/bash
-source venv/bin/activate
+source nenv/bin/activate
 pip install -r requirements.txt
 pytest
