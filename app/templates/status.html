@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link lang='sass' rel="stylesheet" href="./static/styles/main.css">
+    <link rel='icon' href='./static/img/favicon.ico' type='image/x-icon' />
+    <style>
+        .status-root {
+            --good: #0ca30c;
+            --warning: #fab219;
+            --critical: #d03b3b;
+            --track: #e9e8e3;
+            --ink-secondary: #666;
+            --ink-muted: #898781;
+        }
+
+        .status-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .status-header h2 {
+            margin: 0;
+        }
+
+        .status-card .card-header {
+            margin-bottom: 4px;
+        }
+
+        .status-card p {
+            font-size: 13px;
+            color: var(--ink-muted);
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #444;
+        }
+
+        .status-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background-color: var(--ink-muted);
+            flex-shrink: 0;
+        }
+
+        .status-pill.is-good .status-dot { background-color: var(--good); }
+        .status-pill.is-good { color: #0a7a0a; }
+        .status-pill.is-warning .status-dot { background-color: var(--warning); }
+        .status-pill.is-warning { color: #92660c; }
+        .status-pill.is-critical .status-dot { background-color: var(--critical); }
+        .status-pill.is-critical { color: var(--critical); }
+
+        .meter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .meter-card h3 {
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: var(--ink-muted);
+            margin: 0 0 10px 0;
+        }
+
+        .meter-value {
+            font-size: 26px;
+            font-weight: 700;
+            color: #222;
+            margin: 0 0 12px 0;
+            font-variant-numeric: proportional-nums;
+        }
+
+        .meter-value .unit {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--ink-muted);
+        }
+
+        .meter-track {
+            height: 10px;
+            border-radius: 999px;
+            background-color: var(--track);
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .meter-fill {
+            height: 100%;
+            border-radius: 999px;
+            width: 0%;
+            background-color: var(--good);
+            transition: width 0.4s ease, background-color 0.4s ease;
+        }
+
+        .meter-detail {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--ink-secondary);
+        }
+
+        .meter-card.is-warning .meter-fill { background-color: var(--warning); }
+        .meter-card.is-critical .meter-fill { background-color: var(--critical); }
+
+        .status-error {
+            color: var(--critical);
+            font-size: 14px;
+        }
+    </style>
+    <title>{{ title }}</title>
+</head>
+
+<body class="status-root">
+    <header class="nav-bar">
+        <div class="nav-content">
+            <a href="/">
+                <div class="nav-logo">
+                    <img src="./static/img/logo.svg" />
+                </div>
+            </a>
+            <nav class="nav-links">
+                {% for page in pages %}
+                <a href="{{ page.url }}">{{ page.name }}</a>
+                {% endfor %}
+            </nav>
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="container">
+            <div class="status-header">
+                <h2>Server Status</h2>
+                <span class="duration" id="last-updated">Loading…</span>
+            </div>
+
+            <div class="card status-card">
+                <div class="card-header">
+                    <h3>Application</h3>
+                    <span class="status-pill" id="app-status-pill">
+                        <span class="status-dot"></span>
+                        <span id="app-status-text">Checking…</span>
+                    </span>
+                </div>
+                <p id="app-status-detail">Contacting server…</p>
+            </div>
+
+            <div class="meter-grid" id="meter-grid">
+                <div class="card meter-card" id="cpu-meter" data-label="CPU">
+                    <h3>CPU</h3>
+                    <p class="meter-value"><span id="cpu-percent">–</span><span class="unit">%</span></p>
+                    <div class="meter-track"><div class="meter-fill" id="cpu-fill"></div></div>
+                    <div class="meter-detail">
+                        <span id="cpu-cores">– cores</span>
+                        <span class="status-pill" id="cpu-status-pill"><span class="status-dot"></span><span id="cpu-status-text">–</span></span>
+                    </div>
+                </div>
+
+                <div class="card meter-card" id="memory-meter" data-label="Memory">
+                    <h3>Memory</h3>
+                    <p class="meter-value"><span id="memory-percent">–</span><span class="unit">%</span></p>
+                    <div class="meter-track"><div class="meter-fill" id="memory-fill"></div></div>
+                    <div class="meter-detail">
+                        <span id="memory-used">– / – GB</span>
+                        <span class="status-pill" id="memory-status-pill"><span class="status-dot"></span><span id="memory-status-text">–</span></span>
+                    </div>
+                </div>
+
+                <div class="card meter-card" id="disk-meter" data-label="Disk">
+                    <h3>Disk</h3>
+                    <p class="meter-value"><span id="disk-percent">–</span><span class="unit">%</span></p>
+                    <div class="meter-track"><div class="meter-fill" id="disk-fill"></div></div>
+                    <div class="meter-detail">
+                        <span id="disk-used">– / – GB</span>
+                        <span class="status-pill" id="disk-status-pill"><span class="status-dot"></span><span id="disk-status-text">–</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const REFRESH_MS = 5000;
+        const WARNING_THRESHOLD = 70;
+        const CRITICAL_THRESHOLD = 90;
+
+        function severity(percent) {
+            if (percent >= CRITICAL_THRESHOLD) return 'critical';
+            if (percent >= WARNING_THRESHOLD) return 'warning';
+            return 'good';
+        }
+
+        function severityLabel(level) {
+            return { good: 'Normal', warning: 'Warning', critical: 'Critical' }[level];
+        }
+
+        function applyMeter(prefix, percent) {
+            const level = severity(percent);
+            document.getElementById(`${prefix}-percent`).textContent = percent.toFixed(1);
+            document.getElementById(`${prefix}-fill`).style.width = `${Math.min(percent, 100)}%`;
+            document.getElementById(`${prefix}-meter`).className = `card meter-card is-${level}`;
+
+            const pill = document.getElementById(`${prefix}-status-pill`);
+            pill.className = `status-pill is-${level}`;
+            document.getElementById(`${prefix}-status-text`).textContent = severityLabel(level);
+        }
+
+        function setAppStatus(ok, detail) {
+            const pill = document.getElementById('app-status-pill');
+            pill.className = `status-pill is-${ok ? 'good' : 'critical'}`;
+            document.getElementById('app-status-text').textContent = ok ? 'Online' : 'Unreachable';
+            document.getElementById('app-status-detail').textContent = detail;
+        }
+
+        async function loadStatus() {
+            try {
+                const res = await fetch('/api/system_status');
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+
+                setAppStatus(true, data.db === 'ok'
+                    ? 'Flask process and database connection are healthy.'
+                    : 'Flask process is up, but the database connection failed.');
+
+                applyMeter('cpu', data.cpu.percent);
+                document.getElementById('cpu-cores').textContent = `${data.cpu.cores} cores`;
+
+                applyMeter('memory', data.memory.percent);
+                document.getElementById('memory-used').textContent =
+                    `${data.memory.used_gb} / ${data.memory.total_gb} GB`;
+
+                applyMeter('disk', data.disk.percent);
+                document.getElementById('disk-used').textContent =
+                    `${data.disk.used_gb} / ${data.disk.total_gb} GB`;
+
+                document.getElementById('last-updated').textContent =
+                    `Updated ${new Date(data.timestamp).toLocaleTimeString()}`;
+            } catch (err) {
+                setAppStatus(false, 'Could not reach the server status endpoint.');
+                document.getElementById('last-updated').textContent = 'Update failed';
+            }
+        }
+
+        loadStatus();
+        setInterval(loadStatus, REFRESH_MS);
+    </script>
+</body>
+
+</html>

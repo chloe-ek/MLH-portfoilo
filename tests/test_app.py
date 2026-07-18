@@ -18,6 +18,26 @@ def test_timeline_page_loads(client):
     assert response.status_code == 200
 
 
+def test_status_page_loads(client):
+    response = client.get("/status")
+
+    assert response.status_code == 200
+    assert b"Server Status" in response.data
+
+
+def test_system_status_returns_resource_usage(client):
+    response = client.get("/api/system_status")
+
+    assert response.status_code == 200
+    body = response.get_json()
+    assert body["db"] in ("ok", "error")
+    assert 0 <= body["cpu"]["percent"] <= 100
+    assert 0 <= body["memory"]["percent"] <= 100
+    assert 0 <= body["disk"]["percent"] <= 100
+    assert body["memory"]["total_gb"] > 0
+    assert body["disk"]["total_gb"] > 0
+
+
 def test_post_timeline_post_creates_entry(client):
     response = client.post(
         "/api/timeline_post",

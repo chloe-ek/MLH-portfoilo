@@ -1,4 +1,4 @@
-import os, datetime, pymysql
+import os, datetime, pymysql, psutil
 from peewee import *
 from flask import Flask, render_template, request
 from dotenv import load_dotenv
@@ -33,6 +33,7 @@ pages = [
     {"name": "Education", "url": "/#education"},
     {"name": "Certifications", "url": "/#certifications"},
     {"name": "Hobbies", "url": "/hobbies"},
+    {"name": "Status", "url": "/status"},
 ]
 
 hobbies = [
@@ -57,7 +58,7 @@ hobbies = [
 def index():
     about = {
         "name": "Chloe Kwon ",
-        "bio": "Hi! I'm Chloe, a software developer and MLH Fellow based in Vancouver. I love building things for the web and learning new technologies. Outside of coding, I enjoy exploring new places and trying new cafes."
+        "bio": "MLH Fellow on Meta's Production Engineering track. I build and break things to understand how systems stay alive under pressure. Focused on cloud infrastructure, observability, and reliability engineering."
     }
     experiences = [
         {
@@ -124,3 +125,44 @@ def get_time_line_post():
 @app.route('/timeline')
 def timeline():
     return render_template('timeline.html', title="Timeline")
+
+
+def _bytes_to_gb(num_bytes):
+    return round(num_bytes / (1024 ** 3), 2)
+
+
+@app.route('/api/system_status')
+def system_status():
+    cpu_percent = psutil.cpu_percent(interval=0.2)
+    memory = psutil.virtual_memory()
+    disk = psutil.disk_usage('/')
+
+    try:
+        mydb.execute_sql('SELECT 1')
+        db_status = 'ok'
+    except Exception:
+        db_status = 'error'
+
+    return {
+        'db': db_status,
+        'timestamp': datetime.datetime.now().isoformat(),
+        'cpu': {
+            'percent': cpu_percent,
+            'cores': psutil.cpu_count(),
+        },
+        'memory': {
+            'percent': memory.percent,
+            'used_gb': _bytes_to_gb(memory.total - memory.available),
+            'total_gb': _bytes_to_gb(memory.total),
+        },
+        'disk': {
+            'percent': disk.percent,
+            'used_gb': _bytes_to_gb(disk.used),
+            'total_gb': _bytes_to_gb(disk.used + disk.free),
+        },
+    }
+
+
+@app.route('/status')
+def status_page():
+    return render_template('status.html', title="Server Status", pages=pages)
